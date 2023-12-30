@@ -1,0 +1,45 @@
+<!-- templates/index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask App</title>
+</head>
+<body>
+    <h1>Welcome to Flask App</h1>
+    <iframe src="/streamlit" width="800" height="600"></iframe>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask App</title>
+</head>
+<body>
+    <h1>Welcome to Recommendation System</h1>
+    <!-- <p>Click the button to redirect to Streamlit</p> -->
+
+    <!-- JavaScript redirect on button click -->
+    <button onclick="redirectToMovieStreamlit()">Movie Recommendation</button>
+
+    <!-- Another button for course redirection -->
+    <button onclick="redirectToCourseStreamlit()">Course Recommendation</button>
+
+    <iframe id="streamlitFrame" src="" allowfullscreen frameborder="0" width="100%" height="600"></iframe>
+
+    <script>
+        function redirectToMovieStreamlit() {
+            document.getElementById('streamlitFrame').src = '/movies';  // Update with your Flask route
+        }
+
+        // Add this function for course redirection
+        function redirectToCourseStreamlit() {
+            document.getElementById('streamlitFrame').src = '/courses';  // Update with your Flask route for Course Streamlit
+        }
+    </script>
+</body>
+</html>
