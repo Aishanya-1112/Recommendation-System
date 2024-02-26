@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recommendation system</title>
+    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" type="css" href="fonts/Dune_Rise.otf">
+</head>
+<body>
+    <header>
+        <h2 class="uname">The Curator<span style="color: #f85a40">.</span></h2>
+        <nav class="navigation">
+            <a href="landing.html" class="a1">Home</a>
+            <!--
+            <a href="#" class="a1">About</a>
+            <a href="#" class="a1">Contact</a>
+            -->
+            <a href="register.html"><button class="LoginBtn">Sign Up</button></a>
+        </nav>
+    </header>
+
+    <div class="wrapper">
+        <div class="form-box login">
+            <h2>Login</h2>
+            <form id="LoginForm">
+
+                <!-- email input-->
+                <div class="input-box">
+                    <span class="icon"><ion-icon name="mail"></ion-icon></span>
+                    <input type="email" id="LoginEmail" required>
+                    <label>Email</label>
+                </div>
+
+                <!-- password input-->
+                <div class="input-box">
+                    <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
+                    <input type="password" id="LoginPassword" required>
+                    <label>Password</label>
+                </div>
+
+                <!-- forgot password-->
+                <div class="forgot">
+                    <a href="#">Forgot Password</a>
+                </div>
+
+                <!-- sign in button-->
+                <button type="submit" class="btn">Sign In</button>
+
+                <!-- sign up-->
+                <div class="new-user">
+                    <p>New User? <a href="register.html" class="sign-up">Sign Up</a></p>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, get, ref, child } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA6G0elY1JUua2q2w5O8EjTeeU0skq2vzw",
+            authDomain: "recommendation-system-d6548.firebaseapp.com",
+            databaseURL: "https://recommendation-system-d6548-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "recommendation-system-d6548",
+            storageBucket: "recommendation-system-d6548.appspot.com",
+            messagingSenderId: "407667625616",
+            appId: "1:407667625616:web:aaa9ae2a9b01677a019215",
+            measurementId: "G-894W468RJT"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app);
+        const db = getDatabase();
+        const dbref = ref(db);
+
+        const LoginForm = document.getElementById('LoginForm');
+        const LoginEmail = document.getElementById('LoginEmail');
+        const LoginPassword = document.getElementById('LoginPassword');
+
+        LoginForm.addEventListener('submit', function (evt) {
+            evt.preventDefault();
+            signInWithEmailAndPassword(auth, LoginEmail.value, LoginPassword.value)
+                .then((credentials) => {
+                    get(child(dbref, 'UsersAuthList/' + credentials.user.uid)).then((snapshot) => {
+                        if (snapshot.exists) {
+                            sessionStorage.setItem("user-info", JSON.stringify({
+                                username: snapshot.val().username,
+                            }));
+                            sessionStorage.setItem("user-creds", JSON.stringify(credentials.user));
+                            window.location.href = 'index.html';
+                        }
+                    });
+                })
+                .catch((error) => {
+                    alert(error.message);
+                    console.log(error.code);
+                    console.log(error.message);
+                });
+        });
+    </script>
+
+    <script src="script.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1

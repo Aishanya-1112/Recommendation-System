@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recommendation system</title>
+    <link rel="stylesheet" href="register.css">
+    <link rel="stylesheet" type="css" href="fonts/Dune_Rise.otf">
+</head>
+
+<body>
+    <header>
+        <h2 class="uname">The Curator<span style="color: #f85a40;">.</span></h2>
+        <nav class="navigation">
+            <a href="landing.html" class="a1">Home</a>
+            <!--
+            <a href="#" class="a1">About</a>
+            <a href="#" class="a1">Contact</a>
+            -->
+            <a href="login.html"><button class="LoginBtn">Login</button></a>
+        </nav>
+    </header>
+    <div class="wrapper">
+        <div class="form-box register">
+            <h2>Register</h2>
+            <form id="Main-Form">
+
+                <!-- username input-->
+                <div class="input-box">
+                    <span class="icon"><ion-icon name="person"></ion-icon></span>
+                    <input type="text" id="Username_in" required>
+                    <label>UserName</label>
+                </div>
+
+                <!-- email input-->
+                <div class="input-box">
+                    <span class="icon"><ion-icon name="mail"></ion-icon></span>
+                    <input type="email" id="Email_in" required>
+                    <label>Email</label>
+                </div>
+
+                <!--password input-->
+                <div class="input-box">
+                    <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
+                    <input type="password" id="Password_in" required>
+                    <label>Password</label>
+                </div>
+
+                <!-- sign up button-->
+                <button type="button" class="btn" id="SignUpBtn">Sign Up</button>
+
+                <!-- Sign in-->
+                <div class="new-user">
+                    <p>Already have an account? <a href="login.html" class="sign-in">Log In</a></p>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/firebase@10.7.1/dist/firebase-app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/firebase@10.7.1/dist/firebase-auth.js"></script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, set, ref } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        // const firebaseConfig = {
+        //     apiKey: "your-api-key",
+        //     authDomain: "your-auth-domain",
+        //     databaseURL: "your-database-url",
+        //     projectId: "your-project-id",
+        //     storageBucket: "your-storage-bucket",
+        //     messagingSenderId: "your-messaging-sender-id",
+        //     appId: "your-app-id",
+        //     measurementId: "your-measurement-id"
+        // };
+        const firebaseConfig = {
+                apiKey: "AIzaSyA6G0elY1JUua2q2w5O8EjTeeU0skq2vzw",
+                authDomain: "recommendation-system-d6548.firebaseapp.com",
+                databaseURL: "https://recommendation-system-d6548-default-rtdb.asia-southeast1.firebasedatabase.app",
+                projectId: "recommendation-system-d6548",
+                storageBucket: "recommendation-system-d6548.appspot.com",
+                messagingSenderId: "407667625616",
+                appId: "1:407667625616:web:aaa9ae2a9b01677a019215",
+                measurementId: "G-894W468RJT"
+                };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase();
+        const auth = getAuth(app);
+
+        document.getElementById('SignUpBtn').addEventListener('click', () => {
+            const username = document.getElementById('Username_in').value;
+            const email = document.getElementById('Email_in').value;
+            const password = document.getElementById('Password_in').value;
+
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((credentials) => {
+                    if (credentials && credentials.user) {
+                        set(ref(db, 'UsersAuthList/' + credentials.user.uid), {
+                            username: username
+                        });
+                        alert('New user created!');
+                    } else {
+                        console.error('User authentication credentials are undefined or null.');
+                    }
+                })
+                .catch((error) => {
+                    alert(error.message);
+                    console.error(error.code, error.message);
+                });
+        });
+    </script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+
+</body>
+
+</html>
